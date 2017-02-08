@@ -6,3 +6,71 @@
 #
 # Author:  FracPete (fracpete at waikato dot ac dot nz)
 # Version: $Revision: 15070 $
+
+# classifiers
+jsat.classifiers.Classifier=\
+  jsat.classifiers,\
+  jsat.classifiers.bayesian,\
+  jsat.classifiers.boosting,\
+  jsat.classifiers.calibration,\
+  jsat.classifiers.knn,\
+  jsat.classifiers.linear,\
+  jsat.classifiers.neuralnetwork,\
+  jsat.classifiers.svm,\
+  jsat.classifiers.trees
+
+# regressors
+jsat.regression.Regressor=\
+  jsat.regression
+
+# clusterers
+jsat.clustering.Clusterer=\
+  jsat.clustering,\
+  jsat.clustering.dissimilarity,\
+  jsat.clustering.hierarchical,\
+  jsat.clustering.kmeans
+
+# drift detectors
+jsat.driftdetectors.BaseDriftDetector=\
+  jsat.driftdetectors
+
+# filters
+jsat.datatransform.DataTransform=\
+  jsat.datatransform,\
+  jsat.datatransform.featureselection,\
+  jsat.datatransform.kernel
+
+# loss functions
+jsat.lossfunctions.LossFunc=\
+  jsat.lossfunctions
+
+# decay rates
+jsat.math.decayrates.DecayRate=\
+  jsat.math.decayrates
+
+# optimization
+jsat.math.optimization.Optimizer=\
+  jsat.math.optimization
+
+# root finding
+jsat.math.rootfinding.RootFinder=\
+  jsat.math.rootfinding
+
+# statistic tests
+jsat.testing.StatisticTest=\
+  jsat.testing,\
+  jsat.testing.goodnessoffit,\
+  jsat.testing.onesample
+
+# stemmers
+jsat.text.stemming.Stemmer=\
+  jsat.text.stemming
+
+# tokenizers
+jsat.text.tokenizer.Tokenizer=\
+  jsat.text.tokenizer
+
+# word weighting
+jsat.text.wordweighting.WordWeighting=\
+  jsat.text.wordweighting
+

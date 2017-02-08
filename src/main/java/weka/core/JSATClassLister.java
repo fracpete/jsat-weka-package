@@ -54,4 +54,13 @@ public class JSATClassLister
 
     return m_Singleton;
   }
+
+  /**
+   * Just outputs all the managed superclasses and the associated classes.
+   *
+   * @param args	ignored
+   */
+  public static void main(String[] args) {
+    System.out.println(JSATClassLister.getSingleton());
+  }
 }
