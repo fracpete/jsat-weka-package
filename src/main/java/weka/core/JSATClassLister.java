@@ -23,7 +23,7 @@ package weka.core;
 import nz.ac.waikato.cms.locator.ClassLister;
 
 /**
- * ClassLister for Supernova.
+ * ClassLister for JSAT.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
@@ -34,11 +34,12 @@ public class JSATClassLister
   /**
    * Initializes the class lister.
    */
-  public JSATClassLister() {
+  protected JSATClassLister() {
     super();
 
-    m_Packages  = load("weka/core/JSATClassLister.props");
-    m_Blacklist = load("weka/core/JSATClassLister.blacklist");
+    setPackages(load("weka/core/JSATClassLister.props"));
+    setBlacklist(load("weka/core/JSATClassLister.blacklist"));
+    setOnlyDefaultConstructor(true);
 
     initialize();
   }

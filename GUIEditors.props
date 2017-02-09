@@ -9,3 +9,31 @@
 #
 # author:  FracPete (fracpete at waikato dot ac dot nz)
 # version: $Revision: 2019 $
+
+jsat.classifiers.Classifier=weka.gui.GenericObjectEditor
+jsat.regression.Regressor=weka.gui.GenericObjectEditor
+jsat.clustering.Clusterer=weka.gui.GenericObjectEditor
+jsat.driftdetectors.BaseDriftDetector=weka.gui.GenericObjectEditor
+jsat.datatransform.DataTransform=weka.gui.GenericObjectEditor
+jsat.lossfunctions.LossFunc=weka.gui.GenericObjectEditor
+jsat.math.decayrates.DecayRate=weka.gui.GenericObjectEditor
+jsat.math.optimization.Optimizer=weka.gui.GenericObjectEditor
+jsat.math.rootfinding.RootFinder=weka.gui.GenericObjectEditor
+jsat.testing.StatisticTest=weka.gui.GenericObjectEditor
+jsat.text.stemming.Stemmer=weka.gui.GenericObjectEditor
+jsat.text.tokenizer.Tokenizer=weka.gui.GenericObjectEditor
+jsat.text.wordweighting.WordWeighting=weka.gui.GenericObjectEditor
+
+jsat.classifiers.Classifier[]=weka.gui.GenericArrayEditor
+jsat.regression.Regressor[]=weka.gui.GenericArrayEditor
+jsat.clustering.Clusterer[]=weka.gui.GenericArrayEditor
+jsat.driftdetectors.BaseDriftDetector[]=weka.gui.GenericArrayEditor
+jsat.datatransform.DataTransform[]=weka.gui.GenericArrayEditor
+jsat.lossfunctions.LossFunc[]=weka.gui.GenericArrayEditor
+jsat.math.decayrates.DecayRate[]=weka.gui.GenericArrayEditor
+jsat.math.optimization.Optimizer[]=weka.gui.GenericArrayEditor
+jsat.math.rootfinding.RootFinder[]=weka.gui.GenericArrayEditor
+jsat.testing.StatisticTest[]=weka.gui.GenericArrayEditor
+jsat.text.stemming.Stemmer[]=weka.gui.GenericArrayEditor
+jsat.text.tokenizer.Tokenizer[]=weka.gui.GenericArrayEditor
+jsat.text.wordweighting.WordWeighting[]=weka.gui.GenericArrayEditor
