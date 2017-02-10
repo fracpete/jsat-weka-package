@@ -24,7 +24,7 @@ import jsat.classifiers.CategoricalResults;
 import jsat.classifiers.ClassificationDataSet;
 import jsat.classifiers.Classifier;
 import jsat.classifiers.DataPoint;
-import jsat.classifiers.trees.ID3;
+import jsat.classifiers.trees.RandomForest;
 import nz.ac.waikato.cms.jenericcmdline.DefaultProcessor;
 import weka.classifiers.AbstractClassifier;
 import weka.core.Capabilities;
@@ -138,7 +138,7 @@ public class JSATClassifier
    * @return		the default
    */
   protected Classifier getDefaultClassifier() {
-    return new ID3();
+    return new RandomForest();
   }
 
   /**
