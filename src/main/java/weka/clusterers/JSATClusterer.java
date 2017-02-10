@@ -29,6 +29,7 @@ import weka.core.Capabilities;
 import weka.core.Capabilities.Capability;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.JSATDatasetHelper;
 import weka.core.Option;
 import weka.core.Utils;
 
@@ -227,11 +228,12 @@ public class JSATClusterer
    */
   @Override
   public void buildClusterer(Instances instances) throws Exception {
+    getCapabilities().testWithFail(instances);
+
     instances = new Instances(instances);
 
     // convert into JSAT dataset
-    // TODO
-    DataSet dataset = null;
+    DataSet dataset = JSATDatasetHelper.toDataSet(instances, null);
 
     // build
     m_Clusterer.cluster(dataset);

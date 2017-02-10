@@ -30,6 +30,7 @@ import weka.core.Capabilities;
 import weka.core.Capabilities.Capability;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.JSATDatasetHelper;
 import weka.core.Option;
 import weka.core.Utils;
 
@@ -212,12 +213,13 @@ public class JSATRegressor
    */
   @Override
   public void buildClassifier(Instances instances) throws Exception {
+    getCapabilities().testWithFail(instances);
+
     instances = new Instances(instances);
     instances.deleteWithMissingClass();
 
     // convert into JSAT dataset
-    // TODO
-    RegressionDataSet dataset = null;
+    RegressionDataSet dataset = (RegressionDataSet) JSATDatasetHelper.toDataSet(instances, null);
 
     // build
     m_Regressor.train(dataset);
