@@ -98,8 +98,7 @@ public class JSATDatasetHelperTest
    * Test the {@link JSATDatasetHelper#toDataSet(Instances, List)} method.
    */
   public void testToDataSet() throws Exception {
-    Instances input = new Instances(new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream("weka/filters/data/FilterTest.arff"))));
-
+    // TODO
   }
 
   public static Test suite() {
