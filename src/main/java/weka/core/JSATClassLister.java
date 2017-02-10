@@ -40,6 +40,7 @@ public class JSATClassLister
     setPackages(load("weka/core/JSATClassLister.props"));
     setBlacklist(load("weka/core/JSATClassLister.blacklist"));
     setOnlyDefaultConstructor(true);
+    setOnlySerializable(true);
 
     initialize();
   }
