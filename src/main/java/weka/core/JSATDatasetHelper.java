@@ -20,16 +20,15 @@
 
 package weka.core;
 
-import jsat.ARFFLoader;
 import jsat.DataSet;
 import jsat.SimpleDataSet;
 import jsat.classifiers.CategoricalData;
 import jsat.classifiers.ClassificationDataSet;
 import jsat.classifiers.DataPoint;
+import jsat.linear.DenseVector;
 import jsat.linear.Vec;
 import jsat.regression.RegressionDataSet;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,17 +125,85 @@ public class JSATDatasetHelper {
    * Turns an Instances object into a JSAT DataSet.
    *
    * @param data	the instances to convert
+   * @param skipped	the skipped attributes, can be null
    * @return		the DataSet
    */
-  public final static DataSet toDataSet(Instances data) {
-    return null;
-  }
+  public final static DataSet toDataSet(Instances data, List<Attribute> skipped) {
+    DataSet		result;
+    List<Integer>	numeric;
+    List<Integer>	categorical;
+    int			numClass;
+    int			catClass;
+    int			i;
+    int			n;
+    Instance		inst;
+    Attribute		att;
+    CategoricalData[]	cats;
+    Vec			num;
+    List<DataPoint> 	list;
+    int[]		cat;
+    SimpleDataSet	simple;
 
-  public static void main(String[] args) throws Exception {
-    DataSet dataset = ARFFLoader.loadArffFile(new File(args[0]));
-    //dataset = ((SimpleDataSet) dataset).asClassificationDataSet(dataset.getNumCategoricalVars() - 1);
-    dataset = ((SimpleDataSet) dataset).asRegressionDataSet(dataset.getNumNumericalVars() - 1);
-    Instances data = toInstances(dataset);
-    System.out.println(data);
+    // determine indices
+    numeric     = new ArrayList<>();
+    categorical = new ArrayList<>();
+    numClass    = -1;
+    catClass    = -1;
+    if (skipped != null)
+      skipped.clear();
+    for (i = 0; i < data.numAttributes(); i++) {
+      if (data.attribute(i).isNumeric()) {
+	numeric.add(i);
+	if (i == data.classIndex())
+	  numClass = numeric.size() - 1;
+      }
+      else if (data.attribute(i).isNominal()) {
+	categorical.add(i);
+	if (i == data.classIndex())
+	  catClass = categorical.size() - 1;
+      }
+      else if (skipped != null) {
+	skipped.add(data.attribute(i));
+      }
+    }
+
+    // assemble categorical data structures
+    cats = new CategoricalData[categorical.size()];
+    for (i = 0; i < categorical.size(); i++) {
+      att     = data.attribute(categorical.get(i));
+      cats[i] = new CategoricalData(att.numValues());
+      cats[i].setCategoryName(att.name());
+      for (n = 0; n < att.numValues(); n++)
+	cats[i].setOptionName(att.value(n), n);
+    }
+
+    // data
+    list = new ArrayList<>();
+    for (i = 0; i < data.numInstances(); i++) {
+      inst = data.instance(i);
+      // numeric data
+      num = new DenseVector(numeric.size());
+      for (n = 0; n < numeric.size(); n++)
+	num.set(n, inst.value(numeric.get(n)));
+      // categorical
+      cat = new int[categorical.size()];
+      for (n = 0; n < categorical.size(); n++)
+	cat[n] = (int) inst.value(categorical.get(n));
+      // create row
+      list.add(new DataPoint(num, cat, cats, inst.weight()));
+    }
+
+    // dataset
+    simple = new SimpleDataSet(list);
+    for (i = 0; i < numeric.size(); i++)
+      simple.setNumericName(data.attribute(numeric.get(i)).name(), i);
+    if (numClass > -1)
+      result = simple.asRegressionDataSet(numClass);
+    else if (catClass > -1)
+      result = simple.asClassificationDataSet(catClass);
+    else
+      result = simple;
+
+    return result;
   }
 }
