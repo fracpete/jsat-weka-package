@@ -30,9 +30,9 @@ import weka.core.Capabilities;
 import weka.core.Capabilities.Capability;
 import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.JSATDatasetHelper;
 import weka.core.Option;
 import weka.core.Utils;
+import weka.core.WekaToJSAT;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,6 +60,9 @@ public class JSATRegressor
 
   /** the jsat regressor to use. */
   protected Regressor m_Regressor = getDefaultRegressor();
+
+  /** for converting Weka data. */
+  protected WekaToJSAT m_WekaToJSAT = new WekaToJSAT();
 
   /**
    * Returns a string describing classifier
@@ -199,8 +202,7 @@ public class JSATRegressor
     DataPoint	data;
 
     // convert into JSAT row
-    // TODO
-    data = null;
+    data = m_WekaToJSAT.convertRow(instance);
 
     return m_Regressor.regress(data);
   }
@@ -219,7 +221,8 @@ public class JSATRegressor
     instances.deleteWithMissingClass();
 
     // convert into JSAT dataset
-    RegressionDataSet dataset = (RegressionDataSet) JSATDatasetHelper.toDataSet(instances, null);
+    m_WekaToJSAT.initialize(instances);
+    RegressionDataSet dataset = (RegressionDataSet) m_WekaToJSAT.convertDataset(instances);
 
     // build
     m_Regressor.train(dataset);

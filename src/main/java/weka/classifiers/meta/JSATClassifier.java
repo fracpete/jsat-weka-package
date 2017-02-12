@@ -31,9 +31,9 @@ import weka.core.Capabilities;
 import weka.core.Capabilities.Capability;
 import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.JSATDatasetHelper;
 import weka.core.Option;
 import weka.core.Utils;
+import weka.core.WekaToJSAT;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,6 +61,9 @@ public class JSATClassifier
 
   /** the jsat classifier to use. */
   protected Classifier m_Classifier = getDefaultClassifier();
+
+  /** for converting Weka data. */
+  protected WekaToJSAT m_WekaToJSAT = new WekaToJSAT();
 
   /**
    * Returns a string describing classifier
@@ -203,8 +206,7 @@ public class JSATClassifier
     int			i;
 
     // convert into JSAT row
-    // TODO
-    data = null;
+    data = m_WekaToJSAT.convertRow(instance);
 
     dist = m_Classifier.classify(data);
     result = new double[dist.size()];
@@ -228,7 +230,8 @@ public class JSATClassifier
     instances.deleteWithMissingClass();
 
     // convert into JSAT dataset
-    ClassificationDataSet dataset = (ClassificationDataSet) JSATDatasetHelper.toDataSet(instances, null);
+    m_WekaToJSAT.initialize(instances);
+    ClassificationDataSet dataset = (ClassificationDataSet) m_WekaToJSAT.convertDataset(instances);
 
     // build
     m_Classifier.trainC(dataset);

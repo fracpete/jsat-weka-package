@@ -65,9 +65,9 @@ public class JSATRegression
   /**
    * Creates a new <code>JSATRegression</code> instance.
    */
-  public JSATRegression(String suffix) {
-    super(JSATDatasetHelper.class);
-    String relative = JSATDatasetHelper.class.getName().replace('.', File.separatorChar) + suffix + FILE_EXTENSION;
+  public JSATRegression(Class cls, String suffix) {
+    super(cls);
+    String relative = cls.getName().replace('.', File.separatorChar) + (suffix == null ? "" : suffix) + FILE_EXTENSION;
     m_RefFile = new File(getRoot(), relative);
     m_Output = new StringBuffer();
   }

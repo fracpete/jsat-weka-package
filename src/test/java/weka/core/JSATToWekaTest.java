@@ -14,7 +14,7 @@
  */
 
 /**
- * JSATDatasetHelperTest.java
+ * JSATToWekaTest.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
@@ -23,47 +23,35 @@ package weka.core;
 import jsat.ARFFLoader;
 import jsat.DataSet;
 import jsat.SimpleDataSet;
+import jsat.classifiers.DataPoint;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.List;
-
 /**
- * Tests {@link JSATDatasetHelper}.
+ * Tests {@link JSATToWeka} converter.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public class JSATDatasetHelperTest
-  extends TestCase {
+public class JSATToWekaTest
+  extends TestCaseWithReader {
 
   /**
-   * Returns a reader for the dataset.
-   *
-   * @param dataset	the dataset, no path
-   * @return		the reader
-   * @throws Exception	if instantiation of reader fails
+   * Test the {@link JSATToWeka#convertDataset(DataSet)} method.
    */
-  protected BufferedReader getReader(String dataset) throws Exception {
-    return new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream("weka/core/" + dataset)));
-  }
-
-  /**
-   * Test the {@link JSATDatasetHelper#toInstances(DataSet)} method.
-   */
-  public void testToInstances() throws Exception {
+  public void testConvertDataset() throws Exception {
     DataSet 		input;
     Instances 		output;
     JSATRegression 	reg;
+    JSATToWeka		conv;
 
-    reg = new JSATRegression("-toInst");
+    conv = new JSATToWeka();
+    reg  = new JSATRegression(conv.getClass(), null);
 
     input  = ARFFLoader.loadArffFile(getReader("anneal.arff"));
-    output = JSATDatasetHelper.toInstances(input);
+    conv.initialize(input);
+    output = conv.convertDataset(input);
     reg.println("\n");
     reg.println("*****************");
     reg.println("* without class *");
@@ -73,7 +61,8 @@ public class JSATDatasetHelperTest
 
     input  = ARFFLoader.loadArffFile(getReader("anneal.arff"));
     input  = ((SimpleDataSet) input).asClassificationDataSet(input.getNumCategoricalVars() - 1);
-    output = JSATDatasetHelper.toInstances(input);
+    conv.initialize(input);
+    output = conv.convertDataset(input);
     reg.println("\n");
     reg.println("**************************");
     reg.println("* with categorical class *");
@@ -83,7 +72,8 @@ public class JSATDatasetHelperTest
 
     input  = ARFFLoader.loadArffFile(getReader("cpu.arff"));
     input  = ((SimpleDataSet) input).asRegressionDataSet(input.getNumNumericalVars() - 1);
-    output = JSATDatasetHelper.toInstances(input);
+    conv.initialize(input);
+    output = conv.convertDataset(input);
     reg.println("\n");
     reg.println("**********************");
     reg.println("* with numeric class *");
@@ -95,14 +85,14 @@ public class JSATDatasetHelperTest
   }
 
   /**
-   * Test the {@link JSATDatasetHelper#toDataSet(Instances, List)} method.
+   * Tests the {@link JSATToWeka#convertRow(DataPoint)} method.
    */
-  public void testToDataSet() throws Exception {
+  public void testConvertRow() {
     // TODO
   }
 
   public static Test suite() {
-    return new TestSuite(JSATDatasetHelperTest.class);
+    return new TestSuite(JSATToWekaTest.class);
   }
 
   public static void main(String[] args){

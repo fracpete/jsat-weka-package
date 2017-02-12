@@ -21,6 +21,7 @@
 package weka.clusterers;
 
 import jsat.DataSet;
+import jsat.SimpleDataSet;
 import jsat.classifiers.DataPoint;
 import jsat.clustering.Clusterer;
 import jsat.clustering.kmeans.NaiveKMeans;
@@ -29,11 +30,13 @@ import weka.core.Capabilities;
 import weka.core.Capabilities.Capability;
 import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.JSATDatasetHelper;
+import weka.core.JSATToWeka;
 import weka.core.Option;
 import weka.core.Utils;
+import weka.core.WekaToJSAT;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -59,6 +62,12 @@ public class JSATClusterer
 
   /** the jsat clusterer to use. */
   protected Clusterer m_Clusterer = getDefaultClusterer();
+
+  /** for converting Weka data. */
+  protected WekaToJSAT m_WekaToJSAT = new WekaToJSAT();
+
+  /** for converting JSAT data. */
+  protected JSATToWeka m_JsatToWeka = new JSATToWeka();
 
   /**
    * Returns a string describing classifier
@@ -195,14 +204,16 @@ public class JSATClusterer
    */
   @Override
   public int clusterInstance(Instance instance) throws Exception {
+    DataPoint			row;
     DataSet			data;
     List<List<DataPoint>>	result;
 
     // convert into JSAT dataset with single row
-    // TODO
-    data = null;
+    row = m_WekaToJSAT.convertRow(instance);
+    data = new SimpleDataSet(Arrays.asList(row));
 
     result = m_Clusterer.cluster(data);
+    // TODO turn result into cluster index
 
     return -1;
   }
@@ -233,7 +244,8 @@ public class JSATClusterer
     instances = new Instances(instances);
 
     // convert into JSAT dataset
-    DataSet dataset = JSATDatasetHelper.toDataSet(instances, null);
+    m_WekaToJSAT.initialize(instances);
+    DataSet dataset = m_WekaToJSAT.convertDataset(instances);
 
     // build
     m_Clusterer.cluster(dataset);
