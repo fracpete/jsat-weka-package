@@ -151,7 +151,22 @@ public class WekaToJSAT
    */
   @Override
   public DataPoint convertRow(Instance row) {
-    // TODO
-    return null;
+    DataPoint		result;
+    int			n;
+    Vec 		num;
+    int[]		cat;
+
+    // numeric data
+    num = new DenseVector(m_Numeric.size());
+    for (n = 0; n < m_Numeric.size(); n++)
+      num.set(n, row.value(m_Numeric.get(n)));
+    // categorical
+    cat = new int[m_Categorical.size()];
+    for (n = 0; n < m_Categorical.size(); n++)
+      cat[n] = (int) row.value(m_Categorical.get(n));
+    // create row
+    result = new DataPoint(num, cat, m_CategoricalData, row.weight());
+
+    return result;
   }
 }
