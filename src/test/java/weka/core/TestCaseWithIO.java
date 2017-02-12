@@ -14,7 +14,7 @@
  */
 
 /**
- * TestCaseWithReader.java
+ * TestCaseWithIO.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
@@ -23,15 +23,17 @@ package weka.core;
 import junit.framework.TestCase;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * Ancestor for test cases that use {@link java.io.Reader} objects.
+ * Ancestor for test cases that give easy access to {@link java.io.Reader}
+ * and {@link java.io.InputStream} objects.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public class TestCaseWithReader
+public class TestCaseWithIO
   extends TestCase {
 
   /**
@@ -43,5 +45,16 @@ public class TestCaseWithReader
    */
   protected BufferedReader getReader(String dataset) throws Exception {
     return new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream("weka/core/" + dataset)));
+  }
+
+  /**
+   * Returns a stream for the dataset.
+   *
+   * @param dataset	the dataset, no path
+   * @return		the stream
+   * @throws Exception	if instantiation of stream fails
+   */
+  protected InputStream getInputStream(String dataset) throws Exception {
+    return ClassLoader.getSystemResourceAsStream("weka/core/" + dataset);
   }
 }

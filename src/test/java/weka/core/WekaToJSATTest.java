@@ -14,42 +14,61 @@
  */
 
 /**
- * JSATToWekaTest.java
+ * WekaToJSATTest.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
 package weka.core;
 
-import jsat.ARFFLoader;
 import jsat.DataSet;
-import jsat.SimpleDataSet;
 import jsat.classifiers.DataPoint;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+import weka.core.converters.ConverterUtils.DataSource;
 
 /**
- * Tests {@link JSATToWeka} converter.
+ * Tests {@link WekaToJSAT} converter.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public class JSATToWekaTest
+public class WekaToJSATTest
   extends TestCaseWithIO {
 
   /**
-   * Test the {@link JSATToWeka#convertDataset(DataSet)} method.
+   * Turns the dataset into a string.
+   *
+   * @param dataset	the dataset
+   * @return		the generated string
+   */
+  protected String toString(DataSet dataset) {
+    StringBuilder	result;
+    int			i;
+
+    result = new StringBuilder();
+    for (i = 0; i < dataset.getSampleSize(); i++) {
+      if (i > 0)
+	result.append("\n");
+      result.append(dataset.getDataPoint(i).toString());
+    }
+
+    return result.toString();
+  }
+
+  /**
+   * Test the {@link WekaToJSAT#convertDataset(Instances)} method.
    */
   public void testConvertDataset() throws Exception {
-    DataSet 		input;
-    Instances 		output;
+    Instances 		input;
+    DataSet 		output;
     JSATRegression 	reg;
-    JSATToWeka		conv;
+    WekaToJSAT		conv;
 
-    conv = new JSATToWeka();
+    conv = new WekaToJSAT();
     reg  = new JSATRegression(conv.getClass(), "-dataset");
 
-    input  = ARFFLoader.loadArffFile(getReader("anneal.arff"));
+    input  = DataSource.read(getInputStream("anneal.arff"));
     conv.initialize(input);
     output = conv.convertDataset(input);
     reg.println("\n");
@@ -57,10 +76,10 @@ public class JSATToWekaTest
     reg.println("* without class *");
     reg.println("*****************");
     reg.println("\n");
-    reg.println(output.toString());
+    reg.println(toString(output));
 
-    input  = ARFFLoader.loadArffFile(getReader("anneal.arff"));
-    input  = ((SimpleDataSet) input).asClassificationDataSet(input.getNumCategoricalVars() - 1);
+    input  = DataSource.read(getInputStream("anneal.arff"));
+    input.setClassIndex(input.numAttributes() - 1);
     conv.initialize(input);
     output = conv.convertDataset(input);
     reg.println("\n");
@@ -68,10 +87,10 @@ public class JSATToWekaTest
     reg.println("* with categorical class *");
     reg.println("**************************");
     reg.println("\n");
-    reg.println(output.toString());
+    reg.println(toString(output));
 
-    input  = ARFFLoader.loadArffFile(getReader("cpu.arff"));
-    input  = ((SimpleDataSet) input).asRegressionDataSet(input.getNumNumericalVars() - 1);
+    input  = DataSource.read(getInputStream("cpu.arff"));
+    input.setClassIndex(input.numAttributes() - 1);
     conv.initialize(input);
     output = conv.convertDataset(input);
     reg.println("\n");
@@ -79,33 +98,33 @@ public class JSATToWekaTest
     reg.println("* with numeric class *");
     reg.println("**********************");
     reg.println("\n");
-    reg.println(output.toString());
+    reg.println(toString(output));
 
     reg.diff();
   }
 
   /**
-   * Tests the {@link JSATToWeka#convertRow(DataPoint)} method.
+   * Tests the {@link WekaToJSAT#convertRow(Instance)} method.
    */
   public void testConvertRow() throws Exception {
-    DataSet 		input;
-    Instance 		output;
+    Instances 		input;
+    DataPoint 		output;
     JSATRegression 	reg;
-    JSATToWeka		conv;
+    WekaToJSAT		conv;
 
-    conv = new JSATToWeka();
+    conv = new WekaToJSAT();
     reg  = new JSATRegression(conv.getClass(), "-row");
 
-    input  = ARFFLoader.loadArffFile(getReader("anneal.arff"));
+    input  = DataSource.read(getInputStream("anneal.arff"));
     conv.initialize(input);
-    output = conv.convertRow(input.getDataPoint(0));
+    output = conv.convertRow(input.instance(0));
     reg.println(output.toString());
 
     reg.diff();
   }
 
   public static Test suite() {
-    return new TestSuite(JSATToWekaTest.class);
+    return new TestSuite(WekaToJSATTest.class);
   }
 
   public static void main(String[] args){
