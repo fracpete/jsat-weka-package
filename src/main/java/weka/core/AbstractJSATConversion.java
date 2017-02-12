@@ -20,6 +20,8 @@
 
 package weka.core;
 
+import java.io.Serializable;
+
 /**
  * Ancestor for conversions.
  *
@@ -30,7 +32,8 @@ package weka.core;
  * @param <FR> "from row" type
  * @param <TR> "to row" type
  */
-public abstract class AbstractJSATConversion<FD,TD,FR,TR> {
+public abstract class AbstractJSATConversion<FD,TD,FR,TR>
+  implements Serializable {
 
   /**
    * Initializes the conversion.
