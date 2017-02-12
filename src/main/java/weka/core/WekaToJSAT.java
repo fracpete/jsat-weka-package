@@ -144,6 +144,7 @@ public class WekaToJSAT
 
   /**
    * Converts the data row.
+   * NB: skips the class value.
    *
    * @param row		the row to convert
    * @return		the converted row
@@ -153,17 +154,27 @@ public class WekaToJSAT
   public DataPoint convertRow(Instance row) {
     DataPoint		result;
     int			n;
+    int			i;
     Vec 		num;
     int[]		cat;
 
     // numeric data
-    num = new DenseVector(m_Numeric.size());
-    for (n = 0; n < m_Numeric.size(); n++)
-      num.set(n, row.value(m_Numeric.get(n)));
+    num = new DenseVector(m_Numeric.size() - (m_NumClass > -1 ? 1 : 0));
+    i   = 0;
+    for (n = 0; n < m_Numeric.size(); n++) {
+      if (m_NumClass == n)
+	continue;
+      num.set(i, row.value(m_Numeric.get(n)));
+      i++;
+    }
     // categorical
-    cat = new int[m_Categorical.size()];
-    for (n = 0; n < m_Categorical.size(); n++)
-      cat[n] = (int) row.value(m_Categorical.get(n));
+    cat = new int[m_Categorical.size() - (m_CatClass > -1 ? 1 : 0)];
+    i   = 0;
+    for (n = 0; n < m_Categorical.size(); n++) {
+      if (m_CatClass == n)
+	continue;
+      cat[i] = (int) row.value(m_Categorical.get(n));
+    }
     // create row
     result = new DataPoint(num, cat, m_CategoricalData, row.weight());
 
